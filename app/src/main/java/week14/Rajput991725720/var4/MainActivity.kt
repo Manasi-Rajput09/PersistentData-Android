@@ -12,7 +12,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import week14.Rajput991725720.var4.data.AppDb
 import week14.Rajput991725720.var4.datastore.DataStoreManager
-import week14.Rajput991725720.var4.ui.AppTheme
+import week14.Rajput991725720.var4.ui.theme.FinalProjectRajput991725720Theme
 import week14.Rajput991725720.var4.navigation.Screen
 import week14.Rajput991725720.var4.ui.Screen1
 import week14.Rajput991725720.var4.ui.Screen2
@@ -34,9 +34,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            AppTheme {
+            FinalProjectRajput991725720Theme {
 
                 val nav = rememberNavController()
+
 
                 NavHost(
                     navController = nav,

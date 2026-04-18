@@ -1,5 +1,6 @@
 package week14.Rajput991725720.var4.ui
 //Manasi Rajput
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,53 +28,134 @@ fun Screen3(nav: NavController, dao: VoteDao, store: DataStoreManager) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        Modifier.fillMaxSize().padding(16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("VOTING DB", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.headlineMedium)
+        Text(
+            "VOTING DATABASE",
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
 
         Spacer(Modifier.height(16.dp))
 
-        Box(modifier = Modifier.fillMaxWidth().border(2.dp, Color.Green).padding(8.dp)) {
-            Column {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("ID", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                    Text("Name", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                    Text("Age", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                    Text("Voted For", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(modifier = Modifier.padding(12.dp)) {
+                // Table Header
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        "ID",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(0.6f),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        "Name",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1.2f),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        "Age",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(0.6f),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        "Voted For",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1.2f),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
-                Spacer(Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp)) {
+                
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
+
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(votes) { vote ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(vote.enteredId, modifier = Modifier.weight(1f))
-                            Text(vote.name, modifier = Modifier.weight(1f))
-                            Text(vote.age, modifier = Modifier.weight(1f))
-                            Text(vote.option, modifier = Modifier.weight(1f))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(vote.enteredId, modifier = Modifier.weight(0.6f))
+                            Text(vote.name, modifier = Modifier.weight(1.2f))
+                            Text(vote.age, modifier = Modifier.weight(0.6f))
+                            Text(vote.option, modifier = Modifier.weight(1.2f), color = MaterialTheme.colorScheme.primary)
                         }
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                        )
                     }
                 }
             }
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(24.dp))
 
-        Text("Number of votes that have not supported any party so far:", color = Color.Blue)
-        Text("$noneCount", color = Color.Red, style = MaterialTheme.typography.titleLarge)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    shape = MaterialTheme.shapes.medium
+                )
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "Votes for No Party:",
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                "$noneCount",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(24.dp))
 
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Purple, contentColor = Color.White),
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.outline
+                ),
                 onClick = { nav.popBackStack() }
             ) {
-                Text("Back")
+                Text("Back", color = Color.White)
             }
 
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Purple, contentColor = Color.White),
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                ),
                 onClick = { showDialog = true }
             ) {
                 Text("Exit")
@@ -85,19 +167,19 @@ fun Screen3(nav: NavController, dao: VoteDao, store: DataStoreManager) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
             confirmButton = {
-                Button(onClick = {
+                TextButton(onClick = {
                     android.os.Process.killProcess(android.os.Process.myPid())
                 }) {
-                    Text("Exit")
+                    Text("Exit", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                Button(onClick = { showDialog = false }) {
+                TextButton(onClick = { showDialog = false }) {
                     Text("Continue")
                 }
             },
-            title = { Text("Exit App") },
-            text = { Text("Do you want to exit?") }
+            title = { Text("Exit Application") },
+            text = { Text("Are you sure you want to exit the voting system?") }
         )
     }
 }

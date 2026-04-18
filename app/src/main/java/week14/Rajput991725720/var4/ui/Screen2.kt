@@ -34,20 +34,27 @@ fun Screen2(nav: NavController, dao: VoteDao, store: DataStoreManager, id: Strin
     var savedOption by rememberSaveable { mutableStateOf("") }
 
     Column(
-        Modifier.fillMaxSize().padding(16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
-        Text("VOTING STATION", color = Color.Black, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Text(
+            "VOTING STATION",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(Modifier.height(8.dp))
         
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Black)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append("Hello ")
                 }
-                withStyle(style = SpanStyle(color = Color.Red)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)) {
                     append(name)
                 }
             },
@@ -55,20 +62,36 @@ fun Screen2(nav: NavController, dao: VoteDao, store: DataStoreManager, id: Strin
         )
         Spacer(Modifier.height(16.dp))
 
-        Text("Select one party that you are voting for", color = Purple, style = MaterialTheme.typography.bodyLarge)
+        Text(
+            "Select one party that you are voting for",
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Medium
+        )
         Spacer(Modifier.height(16.dp))
 
-        Box(modifier = Modifier.border(2.dp, Color.Blue).padding(16.dp)) {
-            Column {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 val parties = listOf(
-                    Triple("Red Party", "Red Party", Color.Red),
-                    Triple("Blue Party", "Blue Party", Color.Blue),
-                    Triple("Black Party", "Black Party", Color.Black),
-                    Triple("none", "none", Color.Green)
+                    Triple("Red Party", "Red Party", Color(0xFFD32F2F)),
+                    Triple("Blue Party", "Blue Party", Color(0xFF1976D2)),
+                    Triple("Black Party", "Black Party", Color(0xFF212121)),
+                    Triple("None", "none", Color(0xFF388E3C))
                 )
 
                 parties.forEach { (label, value, color) ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    ) {
                         Switch(
                             checked = selected == value,
                             onCheckedChange = { isChecked ->
@@ -79,12 +102,19 @@ fun Screen2(nav: NavController, dao: VoteDao, store: DataStoreManager, id: Strin
                                 }
                             },
                             colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.Green,
-                                checkedTrackColor = Color.Green.copy(alpha = 0.5f)
+                                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                                checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                                uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                             )
                         )
-                        Spacer(Modifier.width(12.dp))
-                        Text(label, color = color)
+                        Spacer(Modifier.width(16.dp))
+                        Text(
+                            label,
+                            color = color,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
             }
@@ -92,31 +122,43 @@ fun Screen2(nav: NavController, dao: VoteDao, store: DataStoreManager, id: Strin
 
         Spacer(Modifier.height(24.dp))
 
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Button(onClick = { nav.popBackStack() }) {
-                Text("Back", color = Color.White)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.outline,
+                    contentColor = Color.White
+                ),
+                onClick = { nav.popBackStack() }
+            ) {
+                Text("Back")
             }
 
             Button(
+                modifier = Modifier.weight(1f),
                 enabled = selected.isNotBlank() && selected != savedOption,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                ),
                 onClick = {
                     if (selected.isNotBlank()) {
                         savedOption = selected
                         CoroutineScope(Dispatchers.IO).launch {
                             val existing = dao.getVoteById(id)
                             
-                            // To be perfectly safe, if they somehow clicked concurrently
                             if (existing?.option == selected) {
                                 return@launch
                             }
 
                             dao.insert(Vote(enteredId = id, name = name, age = age, option = selected))
                             
-                            // Only increment if they are newly voting for 'none' to avoid duplicate counts!
                             if (selected == "none" && existing?.option != "none") {
                                 store.incrementNone()
                             } else if (selected != "none" && existing?.option == "none") {
-                                // Decrement if they change their mind away from none!
                                 store.decrementNone()
                             }
 
@@ -127,15 +169,19 @@ fun Screen2(nav: NavController, dao: VoteDao, store: DataStoreManager, id: Strin
                     }
                 }
             ) {
-                Text("Save", color = Color.White)
+                Text("Save")
             }
 
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Purple),
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
                 onClick = { nav.navigate(Screen.Screen3.route) }
             ) {
-                Text("Next", color = Color.White)
+                Text("Next")
             }
         }
     }
-}
+}
