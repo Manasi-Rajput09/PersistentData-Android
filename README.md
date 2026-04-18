@@ -1,164 +1,139 @@
-\# Git Commands Cheat Sheet
+# 📱 Voting App — Android (Jetpack Compose)
 
+<p align="center">
+  A modern Android application demonstrating multi-screen navigation, local data persistence, and clean UI design using Jetpack Compose.
+</p>
 
+---
 
-\## Basic Workflow
+## 🚀 Overview
 
-git status        # check changes
+This project showcases a fully functional voting application built with **modern Android development tools**. It highlights the integration of **Room Database** for structured data storage and **Preference DataStore** for lightweight key-value persistence, all within a **Jetpack Compose** UI.
 
-git add .         # stage all files
+---
 
-git commit -m "message"   # save changes
+## ✨ Key Features
 
-git push          # upload to GitHub
+* 🧭 **Multi-Screen Navigation** using Navigation Compose
+* 📝 **User Input Validation** (non-empty input required)
+* 🔘 **Single Selection Voting System** (Yes / No / None)
+* 💾 **Persistent Storage**
 
+  * Room Database for storing votes
+  * DataStore for tracking "none" vote count
+* 📊 **Dynamic Data Display** of stored votes
+* ⚠️ **Exit Confirmation Dialog** for better UX
+* 🎨 **Consistent Purple-Themed UI**
 
+---
 
-\## Setup Identity
+## 🛠️ Tech Stack
 
-git config --global user.name "your-name"
+| Category     | Technology                |
+| ------------ | ------------------------- |
+| Language     | Kotlin                    |
+| UI Framework | Jetpack Compose           |
+| Navigation   | Navigation Compose        |
+| Database     | Room (SQLite abstraction) |
+| Storage      | Preference DataStore      |
+| Concurrency  | Kotlin Coroutines         |
 
-git config --global user.email "your-email"
+---
 
+## 📂 Project Architecture
 
+```id="a2k9sl"
+app/
+ └── java/com.example.votingapp/
+     ├── MainActivity.kt
+     ├── data/
+     │     ├── Vote.kt
+     │     ├── VoteDao.kt
+     │     ├── AppDb.kt
+     │     └── DataStoreManager.kt
+     ├── navigation/
+     │     └── Screen.kt
+     └── ui/
+           ├── Screen1.kt
+           ├── Screen2.kt
+           ├── Screen3.kt
+           └── Theme.kt
+```
 
-\## Fix Commit Author
+---
 
-git commit --amend --reset-author --no-edit
+## 🔄 Application Flow
 
-git push --force
+### 1️⃣ Screen 1 — User Input
 
+* Accepts non-empty input
+* Clear option resets DataStore and input
+* Navigates to voting screen
 
+### 2️⃣ Screen 2 — Voting
 
-\## Branching
+* User selects one option
+* Vote is saved in Room Database
+* "None" votes increment DataStore counter
+* Navigates to results screen
 
-git branch        # list branches
+### 3️⃣ Screen 3 — Results
 
-git checkout -b new-branch   # create branch
+* Displays all stored votes
+* Shows "non-support" counter
+* Back navigation and Exit dialog included
 
+---
 
+## 📊 Data Management Strategy
 
-\## Remote
+| Storage Type      | Purpose                                |
+| ----------------- | -------------------------------------- |
+| **Room Database** | Stores structured vote records         |
+| **DataStore**     | Stores simple counter for "none" votes |
 
-git remote -v     # check repo link
+This separation demonstrates real-world Android architecture practices.
 
+---
 
+## ▶️ Getting Started
 
+```id="l9j4ht"
+git clone https://github.com/your-username/voting-app.git
+```
 
+1. Open the project in Android Studio
+2. Sync Gradle dependencies
+3. Run on emulator or physical device
 
+---
 
+## 📈 Learning Highlights
 
-\--------------------------------------------
+* Implemented declarative UI using Jetpack Compose
+* Managed navigation across multiple screens
+* Integrated Room and DataStore effectively
+* Applied asynchronous programming using Coroutines
+* Built a structured and maintainable Android project
 
-\# 1. Stage ALL changes (modified + deleted + new files)
+---
 
-**git add .**
+## 📌 Future Improvements
 
+* MVVM architecture with ViewModel & Repository
+* UI enhancements with Material 3 components
+* Unit & UI testing
+* Dark/Light theme support
 
+---
 
-\# 2. Save changes with a message
+## 👩‍💻 Author
 
-**git commit -m "Updated UI and project changes"**
+**Manasi Rajput**
+Android Developer | Java & Kotlin Enthusiast
 
+---
 
-
-\# 3. Push to GitHub
-
-**git push**
-
-
-
-\---------------------------------------------
-
-***Change Author and Commiter name***
-
-
-
-\# Set your Git username (author name)
-
-**git config --global user.name "Manasi-Rajput09"**
-
-
-
-\# Set your Git email (must match your GitHub email)
-
-**git config --global user.email "your-email@example.com"**
-
-
-
-\# Check current Git configuration
-
-**git config --global --list**
-
-
-
-\# Fix last commit (update author + committer)
-
-**git commit --amend --reset-author --no-edit**
-
-
-
-\# Force push changes to GitHub (overwrite old commit)
-
-**git push --force**
-
-
-
-\------------------------------------
-
-*Current commiter*
-
-**git log --oneline --decorate --show-signature --show-notes --pretty=full**
-
-
-
-\-----------------------------------------------------
-
-*Go back one commit*
-
-*(doesn't work if only one commit)*
-
-
-
-Step 1: Reset commit but keep files
-
-**git reset --soft HEAD\~1**
-
-
-
-👉 This removes the commit but keeps all your code
-
-
-
-Step 2: Make sure Git is using your account
-
-
-
-Set your correct identity:
-
-
-
-git config user.name "Manasi-Rajput09"
-
-git config user.email "your-email@example.com"
-
-
-
-⚠️ Use the same email as your GitHub account
-
-
-
-Step 3: Commit again
-
-**git commit -m "Initial commit"**
-
-Step 4: Force push (important)
-
-**git push --force**
-
-
-
-👉 This replaces the old commit on GitHub
-
-
-
+<p align="center">
+  ⭐ If you found this project useful, consider giving it a star!
+</p>
